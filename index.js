@@ -15,7 +15,7 @@ var player = null
 function start (playlist) {
   if (player) { player.kill() }
 
-  player = spawn('mplayer', ['-playlist', playlist])
+  player = spawn('mplayer', ['-noconsolecontrols', '-playlist', playlist])
   return {status: 'playing'}
 }
 
