@@ -1,0 +1,34 @@
+{
+  "name": "web-player",
+  "version": "1.0.0",
+  "description": "An Express.js based api for controlling mplayer",
+  "main": "index.js",
+  "scripts": {
+    "test": "($(npm bin)/standard index.js | $(npm bin)/standard-reporter --stylish) && $(npm bin)/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/shader/web-player.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mplayer"
+  ],
+  "author": "Samuel Christie",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/shader/web-player/issues"
+  },
+  "homepage": "https://github.com/shader/web-player#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "minimist": "^1.1.3"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5",
+    "standard": "^5.1.0",
+    "standard-reporter": "^1.0.5"
+  }
+}
