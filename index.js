@@ -107,6 +107,9 @@ function load(path) {
       } catch (err) { console.error("Error loading configuration: \n  " + err) }
     }
   } catch (err) { }
+
+  settings.control = settings.control || 'Master'
+
   return settings
 }
 
@@ -115,7 +118,6 @@ var main = function () {
   settings.conf = settings.f || settings.conf || './config.json'
 
   load(settings.conf)
-  settings.control = settings.control || 'Master'
 
   app.listen(settings.p || settings.port || 5050, function(){
     console.log("web-player listening on port %d in %s mode", this.address().port, app.settings.env);
