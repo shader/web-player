@@ -1,8 +1,6 @@
 'use strict'
 let express = require('express')
 let cp = require('child_process')
-let spawn = cp.spawn
-let execSync = cp.execSync
 let extend = require('util')._extend
 let fs = require('fs');
 
@@ -15,7 +13,8 @@ var player = null
 function start (playlist) {
   if (player) { player.kill() }
 
-  player = spawn('mplayer', ['-noconsolecontrols', '-playlist', playlist])
+  player = cp.spawn('mplayer', ['-playlist', playlist],
+                    {'stdio': 'inherit'})
   return {status: 'playing'}
 }
 
@@ -51,7 +50,7 @@ app.get('/stop', function (req, res) {
 })
 
 function set () {
-  return execSync('amixer set ' +
+  return cp.execSync('amixer set ' +
                   settings.control +
                   ' ' + [].join.call(arguments, ' '))
 }
@@ -69,7 +68,7 @@ function volume (vol) {
         set(vol + '%')
     }
   }
-  return {volume: execSync('amixer get Master | egrep -o "[0-9]+%" | head -n 1').toString().trim()}
+  return {volume: cp.execSync('amixer get Master | egrep -o "[0-9]+%" | head -n 1').toString().trim()}
 }
 
 app.get('/volume', function (req, res) {
