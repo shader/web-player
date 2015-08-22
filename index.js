@@ -3,9 +3,11 @@ let express = require('express')
 let cp = require('child_process')
 let spawn = cp.spawn
 let execSync = cp.execSync
-let app = express()
-let opts = require('minimist')(process.argv.slice(2))
 
+let app = express()
+app.use(require('morgan')('dev'))
+
+let opts = require('minimist')(process.argv.slice(2))
 opts.control = opts.control || 'Master'
 
 var player = null
@@ -94,7 +96,9 @@ app.get('/unmute', function (req, res) {
 })
 
 var main = function () {
-  app.listen(opts.p || opts.port || 5050)
+  app.listen(opts.p || opts.port || 5050, function(){
+    console.log("web-player listening on port %d in %s mode", this.address().port, app.settings.env);
+  });
 }
 
 if (require.main === module) {

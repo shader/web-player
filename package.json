@@ -4,7 +4,8 @@
   "description": "An Express.js based api for controlling mplayer",
   "main": "index.js",
   "scripts": {
-    "test": "($(npm bin)/standard index.js | $(npm bin)/standard-reporter --stylish) && $(npm bin)/mocha"
+    "test": "($(npm bin)/standard index.js | $(npm bin)/standard-reporter --stylish) && $(npm bin)/mocha",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,8 @@
   "homepage": "https://github.com/shader/web-player#readme",
   "dependencies": {
     "express": "^4.13.3",
-    "minimist": "^1.1.3"
+    "minimist": "^1.1.3",
+    "morgan": "^1.6.1"
   },
   "devDependencies": {
     "chai": "^3.2.0",
