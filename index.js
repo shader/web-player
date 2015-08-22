@@ -96,20 +96,25 @@ app.get('/unmute', function (req, res) {
   res.json(unmute())
 })
 
-var main = function () {
-  settings = require('minimist')(process.argv.slice(2))
-  settings.conf = settings.f || settings.conf || './config.json'
+function load(path) {
   try {
-    let stats = fs.lstatSync(settings.conf);
+    let stats = fs.lstatSync(path);
 
     if (stats.isFile()) {
       try {
-        var contents = fs.readFileSync(settings.conf, 'utf8')
+        var contents = fs.readFileSync(path, 'utf8')
         settings = extend(settings, JSON.parse(contents))
       } catch (err) { console.error("Error loading configuration: \n  " + err) }
     }
   } catch (err) { }
+  return settings
+}
 
+var main = function () {
+  settings = require('minimist')(process.argv.slice(2))
+  settings.conf = settings.f || settings.conf || './config.json'
+
+  load(settings.conf)
   settings.control = settings.control || 'Master'
 
   app.listen(settings.p || settings.port || 5050, function(){
@@ -122,5 +127,5 @@ if (require.main === module) {
 }
 
 module.exports = {
-  start, stop, di, app, main, volume, mute, unmute
+  start, stop, di, app, main, volume, mute, unmute, load
 }
