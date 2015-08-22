@@ -3,12 +3,13 @@ let express = require('express')
 let cp = require('child_process')
 let spawn = cp.spawn
 let execSync = cp.execSync
+let extend = require('util')._extend
+let fs = require('fs');
 
 let app = express()
 app.use(require('morgan')('dev'))
 
-let opts = require('minimist')(process.argv.slice(2))
-opts.control = opts.control || 'Master'
+var settings = {}
 
 var player = null
 function start (playlist) {
@@ -35,7 +36,7 @@ function di (channel) {
   return 'http://listen.di.fm/premium/' +
     channel +
     '.pls?listen_key=' +
-    opts.di
+    settings.di
 }
 
 app.get('/di/:channel', function (req, res) {
@@ -51,7 +52,7 @@ app.get('/stop', function (req, res) {
 
 function set () {
   return execSync('amixer set ' +
-                  opts.control +
+                  settings.control +
                   ' ' + [].join.call(arguments, ' '))
 }
 
@@ -96,7 +97,22 @@ app.get('/unmute', function (req, res) {
 })
 
 var main = function () {
-  app.listen(opts.p || opts.port || 5050, function(){
+  settings = require('minimist')(process.argv.slice(2))
+  settings.conf = settings.f || settings.conf || './config.json'
+  try {
+    let stats = fs.lstatSync(settings.conf);
+
+    if (stats.isFile()) {
+      try {
+        var contents = fs.readFileSync(settings.conf, 'utf8')
+        settings = extend(settings, JSON.parse(contents))
+      } catch (err) { console.error("Error loading configuration: \n  " + err) }
+    }
+  } catch (err) { }
+
+  settings.control = settings.control || 'Master'
+
+  app.listen(settings.p || settings.port || 5050, function(){
     console.log("web-player listening on port %d in %s mode", this.address().port, app.settings.env);
   });
 }
